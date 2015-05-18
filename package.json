@@ -1,0 +1,22 @@
+{
+    "name": "airsound",
+    "version": "0.0.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/tenorok/airsound.git"
+    },
+    "author": {
+        "name": "Artem Kurbatov",
+        "email": "mail@tenorok.ru",
+        "homepage": "http://tenorok.ru"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "evilscan": "1.0.0"
+    },
+    "devDependencies": {
+        "git-hooks": "~0.0.6",
+        "tslint": "~2.2.0",
+        "yaspeller": "~2.1.0"
+    }
+}
