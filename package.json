@@ -16,7 +16,10 @@
     },
     "devDependencies": {
         "git-hooks": "~0.0.6",
-        "tslint": "~2.2.0",
+        "tslint": "^2.1.0",
         "yaspeller": "~2.1.0"
+    },
+    "scripts": {
+        "tsd": "tsd reinstall && tsd rebundle"
     }
 }
