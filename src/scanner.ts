@@ -4,7 +4,7 @@ const Evilscan = require('evilscan');
 
 import * as http from 'http';
 
-export interface IAddress {
+export type Address = {
     ip: string;
     port: number;
     response: { [key: string]: any };
@@ -13,7 +13,7 @@ export interface IAddress {
 export default class Scanner {
 
     private evilscan;
-    private requests: Promise<IAddress>[] = [];
+    private requests: Promise<Address>[] = [];
 
     constructor(private ip: string, private port: string, private query: { path: string; resProps: string[] }) {
         this.evilscan = new Evilscan({
@@ -24,11 +24,11 @@ export default class Scanner {
             .on('error', Scanner.onError);
     }
 
-    scan(): Promise<IAddress[]> {
+    scan(): Promise<Address[]> {
         this.evilscan.run();
-        return new Promise<IAddress[]>((resolve) => {
+        return new Promise<Address[]>((resolve) => {
             this.evilscan.on('done', () => {
-                Promise.all(this.requests).then((addresses) => {
+                Promise.all(this.requests).then((addresses: Address[]) => {
                     resolve(addresses.filter(address => !!address));
                 });
             });
@@ -38,7 +38,7 @@ export default class Scanner {
     protected onResult(host: { ip: string; port: number; status: string; }): void {
         if(host.status !== 'open') return;
 
-        this.requests.push(new Promise<IAddress>((resolve, reject) => {
+        this.requests.push(new Promise<Address>((resolve) => {
             http.get({
                 hostname: host.ip,
                 port: host.port,
