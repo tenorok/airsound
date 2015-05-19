@@ -10,6 +10,15 @@
     },
     "es6-promise/es6-promise.d.ts": {
       "commit": "7d2f0aa875cc3bc41f3567e3ff99d344df986155"
+    },
+    "express/express.d.ts": {
+      "commit": "2259de6588fb6627c3e511bcf40a0e85cadefbc5"
+    },
+    "ip/ip.d.ts": {
+      "commit": "2259de6588fb6627c3e511bcf40a0e85cadefbc5"
+    },
+    "lodash/lodash.d.ts": {
+      "commit": "2259de6588fb6627c3e511bcf40a0e85cadefbc5"
     }
   }
 }
