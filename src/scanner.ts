@@ -3,6 +3,7 @@
 const Evilscan = require('evilscan');
 
 import * as http from 'http';
+import Client from './client';
 
 /**
  * Found address.
@@ -25,11 +26,8 @@ export default class Scanner {
      * @see {@link https://npmjs.com/package/evilscan}
      * @param ip Range of IP addresses.
      * @param port Range of ports.
-     * @param query Config for query to the founded addresses.
-     * @param query.path Query path.
-     * @param query.resProps List of properties that should be available in the response from the founded address.
      */
-    constructor(private ip: string, private port: string, private query: { path: string; resProps: string[] }) {
+    constructor(private ip: string, private port: string) {
         this.evilscan = new Evilscan({
             target: ip,
             port: port
@@ -67,14 +65,17 @@ export default class Scanner {
             http.get({
                 hostname: host.ip,
                 port: host.port,
-                path: this.query.path
+                path: Client.routes.info
             }, (res) => {
                 res.setEncoding('utf8');
                 res.on('data', (data) => {
-                    let response = JSON.parse(data),
-                        isValidResponse = this.query.resProps.every((prop) => { return !!response[prop] });
+                    try {
+                        var response = JSON.parse(data);
+                    } catch(err) {
+                        resolve();
+                    }
 
-                    isValidResponse
+                    Client.isInfoData(response)
                         ? resolve({
                             ip: host.ip,
                             port: host.port,

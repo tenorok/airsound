@@ -9,6 +9,11 @@ import * as _ from 'lodash';
 type ConfigParam = { ip?: string; port: number; };
 type Config = { ip: string; port: number; };
 
+export type InfoData = {
+    identity: string;
+    mac: string;
+};
+
 export default class Client {
 
     private config: Config;
@@ -19,19 +24,19 @@ export default class Client {
             ip: ip.address()
         });
         this.express = express();
-        this.getMacAddress(); // Heating.
+        this.getMacAddress(); // Heating cache.
     }
 
-    run(): void {
+    listen(onStart?: Function): void {
         this.express.get(Client.routes.info, this.onInfo.bind(this));
         this.express.get(Client.routes.play, this.onPlay.bind(this));
         this.express.get(Client.routes.stop, this.onStop.bind(this));
-        this.express.listen(this.config.port, this.config.ip);
+        this.express.listen(this.config.port, this.config.ip, onStart);
     }
 
     protected onInfo(req: express.Request, res: express.Response): void {
         this.getMacAddress().then((macAddress) => {
-            res.json({
+            res.json(<InfoData>{
                 identity: Client.identity,
                 mac: macAddress
             });
@@ -59,6 +64,11 @@ export default class Client {
                 resolve(macAddress);
             });
         });
+    }
+
+    static isInfoData(data: InfoData|any): boolean {
+        if(typeof data !== 'object') return false;
+        return typeof data.identity === 'string' && typeof data.mac === 'string';
     }
 
     static identity = 'airsound';
