@@ -15,6 +15,7 @@
         "evilscan": "1.0.0",
         "express": "~4.12.4",
         "ip": "^0.3.2",
+        "getmac": "~1.0.7",
         "lodash": "^3.9.0"
     },
     "devDependencies": {

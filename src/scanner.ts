@@ -84,7 +84,7 @@ export default class Scanner {
                 });
             }).on('error', (err: Error) => {
                 resolve();
-                throw new Error(err.message);
+                throw err;
             });
         }));
     }
