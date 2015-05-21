@@ -75,8 +75,8 @@ export default class Scanner {
                         resolve();
                     }
 
-                    Client.isInfoData(response)
-                        ? resolve({
+                    Client.isInfoResponse(response)
+                        ? resolve(<Address>{
                             ip: host.ip,
                             port: host.port,
                             response: response

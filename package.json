@@ -16,7 +16,10 @@
         "express": "~4.12.4",
         "ip": "^0.3.2",
         "getmac": "~1.0.7",
-        "lodash": "^3.9.0"
+        "lodash": "^3.9.0",
+        "lame": "~1.2.2",
+        "icecast": "~1.3.1",
+        "speaker": "^0.2.5"
     },
     "devDependencies": {
         "git-hooks": "~0.0.6",

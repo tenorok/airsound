@@ -2,17 +2,23 @@
 
 const getmac = require('getmac');
 
+import { UrlOptions } from 'url';
 import * as express from 'express';
 import * as ip from 'ip';
 import * as _ from 'lodash';
+import Speaker from './speaker';
 
 type ConfigParam = { ip?: string; port: number; };
 type Config = { ip: string; port: number; };
 
-export type InfoData = {
+export type InfoResponse = {
     identity: string;
     mac: string;
 };
+
+export interface PlayRequest extends UrlOptions {
+    href?: string;
+}
 
 export default class Client {
 
@@ -29,23 +35,30 @@ export default class Client {
 
     listen(onStart?: Function): void {
         this.express.get(Client.routes.info, this.onInfo.bind(this));
-        this.express.get(Client.routes.play, this.onPlay.bind(this));
-        this.express.get(Client.routes.stop, this.onStop.bind(this));
+        this.express.get(Client.routes.play, Client.onPlay.bind(this));
+        this.express.get(Client.routes.stop, Client.onStop.bind(this));
         this.express.listen(this.config.port, this.config.ip, onStart);
     }
 
     protected onInfo(req: express.Request, res: express.Response): void {
         this.getMacAddress().then((macAddress) => {
-            res.json(<InfoData>{
+            res.json(<InfoResponse>{
                 identity: Client.identity,
                 mac: macAddress
             });
         });
     }
 
-    protected onPlay(req: express.Request, res: express.Response): void {}
+    protected static onPlay(req: express.Request, res: express.Response): void {
+        let query: PlayRequest = req.query;
+        Speaker.on(query.href || query);
+        res.end();
+    }
 
-    protected onStop(req: express.Request, res: express.Response): void {}
+    protected static onStop(req: express.Request, res: express.Response): void {
+        Speaker.off();
+        res.end();
+    }
 
     private macAddress: string;
 
@@ -66,7 +79,7 @@ export default class Client {
         });
     }
 
-    static isInfoData(data: InfoData|any): boolean {
+    static isInfoResponse(data: InfoResponse|any): boolean {
         if(typeof data !== 'object') return false;
         return typeof data.identity === 'string' && typeof data.mac === 'string';
     }
